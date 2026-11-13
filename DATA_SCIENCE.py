@@ -15,24 +15,19 @@ from sklearn.metrics import accuracy_score
 # Summary statistics of numerical columns
 
 
-# Charger les jeux de données
-train_data = pd.read_csv('"C:\Users\ahm21\OneDrive\Desktop\DATA_SCIENCE\titanic\train.csv"')
-test_data = pd.read_csv("C:\Users\ahm21\OneDrive\Desktop\DATA_SCIENCE\titanic\test.csv")
+# Load the dataset relative to this script so it works on any machine.
+from pathlib import Path
 
-# Show the first few rows of the training data
+DATA_DIR = Path(__file__).resolve().parent / "titanic"
+train_data = pd.read_csv(DATA_DIR / "train.csv")
+test_data = pd.read_csv(DATA_DIR / "test.csv")
+
 print(train_data.head())
-# Summary of the dataset
 print(train_data.info())
-# Summary statistics of numerical columns
-print(train_data.describe(include='all'))
+print(train_data.describe(include="all"))
 
-# Prétraiter les données
-# Remplacer les valeurs manquantes sans utiliser inplace=True
-train_data['Age'] = train_data['Age'].fillna(train_data['Age'].median())
-train_data['Embarked'] = train_data['Embarked'].fillna(train_data['Embarked'].mode()[0])
-
-test_data['Age'] = test_data['Age'].fillna(test_data['Age'].median())
-test_data['Embarked'] = test_data['Embarked'].fillna(test_data['Embarked'].mode()[0])
+# Missing values are imputed inside the sklearn pipeline below.
+# Do not impute the full dataset before train/test splitting or cross-validation.
 
 # Définir les features numériques et catégorielles
 numeric_features = ['Age', 'Pclass', 'SibSp', 'Parch']
